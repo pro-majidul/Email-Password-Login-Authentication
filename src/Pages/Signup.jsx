@@ -3,9 +3,9 @@ import { auth } from './../firebase.init';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = () => {
-     const [errorMassage , setErrorMassage] = useState(' ');
-     const [success , setSuccess] = useState(false)
-     
+    const [errorMassage, setErrorMassage] = useState(' ');
+    const [success, setSuccess] = useState(false)
+
     const handelSignUp = e => {
         e.preventDefault();
         const email = e.target.email.value;
@@ -13,8 +13,14 @@ const Signup = () => {
         setErrorMassage('');
         setSuccess(false)
 
-        if(email.length < 6){
+        if (email.length < 6) {
             setErrorMassage(message)
+            return
+        }
+
+        const regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+        if (!regularExpression.test(password)) {
+            setErrorMassage('At least One number , one UpperCase , one LowerCase , One Digits and one special charecter');
             return
         }
         createUserWithEmailAndPassword(auth, email, password)
