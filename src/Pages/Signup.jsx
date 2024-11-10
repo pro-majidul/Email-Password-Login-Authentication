@@ -3,19 +3,29 @@ import { auth } from './../firebase.init';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = () => {
-     const [errorMassage , setErrorMassage] = useState(' ')
+     const [errorMassage , setErrorMassage] = useState(' ');
+     const [success , setSuccess] = useState(false)
+     
     const handelSignUp = e => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        setErrorMassage('')
+        setErrorMassage('');
+        setSuccess(false)
+
+        if(email.length < 6){
+            setErrorMassage(message)
+            return
+        }
         createUserWithEmailAndPassword(auth, email, password)
             .then(result => {
                 console.log(result);
+                setSuccess(true)
             })
             .catch(error => {
                 console.log(error.message);
-                setErrorMassage(error.message)
+                setErrorMassage(error.message);
+                setSuccess(false)
             })
     }
     return (
@@ -43,6 +53,9 @@ const Signup = () => {
             </form>
             {
                 errorMassage && <h3 className='text-xl text-red-400 font-bold'>{errorMassage}</h3>
+            }
+            {
+                success && <p className='text-xl font-bold text-green-300'> Successfully sign in</p>
             }
         </div>
     );
