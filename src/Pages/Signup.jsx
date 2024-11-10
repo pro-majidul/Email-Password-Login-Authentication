@@ -7,14 +7,20 @@ import { IoIosEyeOff } from 'react-icons/io';
 const Signup = () => {
     const [errorMassage, setErrorMassage] = useState(' ');
     const [success, setSuccess] = useState(false);
-    const [showPassword , setSowPassword] = useState(false)
+    const [showPassword, setSowPassword] = useState(false)
 
     const handelSignUp = e => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
+        const terms = e.target.terms.checked;
         setErrorMassage('');
         setSuccess(false)
+        console.log(terms , email , password);
+        if (!terms) {
+            setErrorMassage('please checked terms and conditions');
+            return
+        }
 
         if (email.length < 6) {
             setErrorMassage(message)
@@ -57,14 +63,20 @@ const Signup = () => {
                         placeholder="password"
                         className="input input-bordered" required />
                     <button
-                    onClick={()=>setSowPassword(!showPassword)}
-                     className='absolute right-10 top-44'>
-                       {
-                        showPassword ?  <MdOutlineRemoveRedEye></MdOutlineRemoveRedEye> : <IoIosEyeOff></IoIosEyeOff>
-                       }
+                        onClick={() => setSowPassword(!showPassword)}
+                        className='absolute right-10 top-44'>
+                        {
+                            showPassword ? <MdOutlineRemoveRedEye></MdOutlineRemoveRedEye> : <IoIosEyeOff></IoIosEyeOff>
+                        }
                     </button >
                     <label className="label">
                         <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="cursor-pointer justify-start label">
+                        <input type="checkbox" name='terms' className="checkbox checkbox-warning" />
+                        <span className="label-text ml-2">Accep our Terms and Conditions</span>
                     </label>
                 </div>
                 <div className="form-control mt-6">
