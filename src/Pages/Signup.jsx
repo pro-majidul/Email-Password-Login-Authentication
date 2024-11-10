@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from './../firebase.init';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { IoIosEyeOff } from 'react-icons/io';
 import { NavLink } from 'react-router-dom';
@@ -37,6 +37,11 @@ const Signup = () => {
             .then(result => {
                 console.log(result);
                 setSuccess(true)
+                // send varificatio email address
+                sendEmailVerification(auth.currentUser)
+                .then(()=>{
+                    console.log('varification email send')
+                })
             })
             .catch(error => {
                 console.log(error.message);
