@@ -1,26 +1,27 @@
+import React, { useState } from 'react';
+import { auth } from './../firebase.init';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import React from 'react';
-import { auth } from '../firebase.init';
 
-const Login = () => {
-
-
-    const handelformSubmit = event => {
-        event.preventDefault();
-        const email = (event.target.email.value);
-        const password = (event.target.password.value);
+const Signup = () => {
+     const [errorMassage , setErrorMassage] = useState(' ')
+    const handelSignUp = e => {
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        setErrorMassage('')
         createUserWithEmailAndPassword(auth, email, password)
-            .then((result) => {
+            .then(result => {
                 console.log(result);
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.message);
+                setErrorMassage(error.message)
             })
     }
     return (
-        <div className='max-w-lg mx-auto'>
-            <h4 className="text-3xl font-bold">Login</h4>
-            <form onSubmit={handelformSubmit} className="card-body">
+        <div className="card mx-auto bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+            <h1 className="text-5xl ml-4 font-bold">Sign up now!</h1>
+            <form onSubmit={handelSignUp} className="card-body">
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Email</span>
@@ -31,17 +32,20 @@ const Login = () => {
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
-                    <input type="password" placeholder="password" className="input input-bordered" name='password' required />
+                    <input type="password" name='password' placeholder="password" className="input input-bordered" required />
                     <label className="label">
                         <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                     </label>
                 </div>
                 <div className="form-control mt-6">
-                    <button className="btn btn-primary">Login</button>
+                    <button className="btn btn-primary">Sign Up</button>
                 </div>
             </form>
+            {
+                errorMassage && <h3 className='text-xl text-red-400 font-bold'>{errorMassage}</h3>
+            }
         </div>
     );
 };
 
-export default Login;
+export default Signup;
