@@ -3,6 +3,7 @@ import { auth } from './../firebase.init';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { IoIosEyeOff } from 'react-icons/io';
+import { NavLink } from 'react-router-dom';
 
 const Signup = () => {
     const [errorMassage, setErrorMassage] = useState(' ');
@@ -89,6 +90,7 @@ const Signup = () => {
             {
                 success && <p className='text-xl font-bold text-green-300'> Successfully sign in</p>
             }
+            <p>All Ready have an Account . Please <NavLink to='/login'>Login</NavLink> </p>
         </div>
     );
 };
