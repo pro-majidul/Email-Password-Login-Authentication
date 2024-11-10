@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { auth } from './../firebase.init';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import { IoIosEyeOff } from 'react-icons/io';
 
 const Signup = () => {
     const [errorMassage, setErrorMassage] = useState(' ');
-    const [success, setSuccess] = useState(false)
+    const [success, setSuccess] = useState(false);
+    const [showPassword , setSowPassword] = useState(false)
 
     const handelSignUp = e => {
         e.preventDefault();
@@ -37,7 +40,7 @@ const Signup = () => {
     return (
         <div className="card mx-auto bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
             <h1 className="text-5xl ml-4 font-bold">Sign up now!</h1>
-            <form onSubmit={handelSignUp} className="card-body">
+            <form onSubmit={handelSignUp} className="card-body relative">
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Email</span>
@@ -48,7 +51,18 @@ const Signup = () => {
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
-                    <input type="password" name='password' placeholder="password" className="input input-bordered" required />
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        name='password'
+                        placeholder="password"
+                        className="input input-bordered" required />
+                    <button
+                    onClick={()=>setSowPassword(!showPassword)}
+                     className='absolute right-10 top-44'>
+                       {
+                        showPassword ?  <MdOutlineRemoveRedEye></MdOutlineRemoveRedEye> : <IoIosEyeOff></IoIosEyeOff>
+                       }
+                    </button >
                     <label className="label">
                         <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                     </label>
