@@ -1,33 +1,47 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { NavLink } from "react-router-dom";
 import { auth } from "../firebase.init";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const Login = () => {
-    const [successlogin , setSuccessLogin] = useState('')
-    const [errorMassage , setErrorMassage] = useState('')
+    const [successlogin, setSuccessLogin] = useState('')
+    const [errorMassage, setErrorMassage] = useState('')
+    const emailRef = useRef()
     const handelLogin = e => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
         setSuccessLogin('')
         setErrorMassage('')
-        signInWithEmailAndPassword(auth , email , password)
-        .then(result =>{
-            console.log(result.user);
-            if(!result.user.emailVerified){
-                setErrorMassage('please Varified your email address')
-            }
-            else{
+        signInWithEmailAndPassword(auth, email, password)
+            .then(result => {
+                console.log(result.user);
+                if (!result.user.emailVerified) {
+                    setErrorMassage('please Varified your email address')
+                }
+                else {
 
-                setSuccessLogin('SuccessFully Login')
-            }
-        })
-        .catch(error => {
-            console.log(error.message);
-            setSuccessLogin('')
-            setErrorMassage(error.message)
-        })
+                    setSuccessLogin('SuccessFully Login')
+                }
+            })
+            .catch(error => {
+                console.log(error.message);
+                setSuccessLogin('')
+                setErrorMassage(error.message)
+            })
+    }
+
+    const handelforgetpassword = () => {
+        console.log('handel email password reset added');
+        const email = emailRef.current.value;
+        if (!email) {
+            return alert('please provide a valide email address')
+        }
+        else{
+            sendPasswordResetEmail(auth , email)
+            .then(()=> alert('pasword reset send your email'))
+            .catch(error => console.log(error))
+        }
     }
 
 
@@ -47,7 +61,7 @@ const Login = () => {
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
-                            <input type="email" name="email" placeholder="email" className="input input-bordered" required />
+                            <input type="email" name="email" ref={emailRef} placeholder="email" className="input input-bordered" required />
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -55,7 +69,7 @@ const Login = () => {
                             </label>
                             <input type="password" name="password" placeholder="password" className="input input-bordered" required />
                             <label className="label">
-                                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                                <a onClick={handelforgetpassword} href="#" className="label-text-alt link link-hover">Forgot password?</a>
                             </label>
                         </div>
                         <div className="form-control mt-6">
