@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from './../firebase.init';
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { IoIosEyeOff } from 'react-icons/io';
 import { NavLink } from 'react-router-dom';
@@ -14,6 +14,8 @@ const Signup = () => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
+        const name = e.target.name.value;
+        const photo = e.target.photo.value;
         const terms = e.target.terms.checked;
         setErrorMassage('');
         setSuccess(false)
@@ -42,6 +44,15 @@ const Signup = () => {
                 .then(()=>{
                     console.log('varification email send')
                 })
+
+                // update user profile
+                const profile = {
+                    displayName : name,
+                    photoURL : photo
+                }
+                updateProfile(auth.currentUser , profile)
+                .then(result => console.log(result))
+                .catch(error => console.log(error))
             })
             .catch(error => {
                 console.log(error.message);
@@ -52,14 +63,26 @@ const Signup = () => {
     return (
         <div className="card mx-auto bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
             <h1 className="text-5xl ml-4 font-bold">Sign up now!</h1>
-            <form onSubmit={handelSignUp} className="card-body relative">
+            <form onSubmit={handelSignUp} className="card-body ">
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Name</span>
+                    </label>
+                    <input type="text" name='name' placeholder="name" className="input input-bordered" required />
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Photo Url</span>
+                    </label>
+                    <input type="text" name='photo' placeholder="photo url" className="input input-bordered" required />
+                </div>
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Email</span>
                     </label>
                     <input type="email" name='email' placeholder="email" className="input input-bordered" required />
                 </div>
-                <div className="form-control">
+                <div className="form-control relative">
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
@@ -70,7 +93,7 @@ const Signup = () => {
                         className="input input-bordered" required />
                     <button
                         onClick={() => setSowPassword(!showPassword)}
-                        className='absolute right-10 top-44'>
+                        className='absolute right-4 top-12'>
                         {
                             showPassword ? <MdOutlineRemoveRedEye></MdOutlineRemoveRedEye> : <IoIosEyeOff></IoIosEyeOff>
                         }
